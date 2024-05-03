@@ -1,4 +1,6 @@
+import 'package:ecommerce_user/features/cart/ui/cart_page.dart';
 import 'package:ecommerce_user/features/product/bloc/products_bloc.dart';
+import 'package:ecommerce_user/features/product/repos/products_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +35,10 @@ class _ProductPageState extends State<ProductPage> {
         actions: [
           IconButton(onPressed: () {
             FirebaseAuth.instance.signOut();
-          }, icon: const Icon(Icons.login_outlined, color: Colors.white,))
+          }, icon: const Icon(Icons.login_outlined, color: Colors.white,)),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage()));
+          }, icon: Icon(Icons.shopping_cart, color: Colors.white,))
         ],
       ),
       body: BlocConsumer<ProductsBloc, ProductsState>(
@@ -70,8 +75,12 @@ class _ProductPageState extends State<ProductPage> {
                           SizedBox(height: 10,),
                           SizedBox(
                             child: ElevatedButton(
-                              onPressed: (){},
-                              child: Text("Add to Cart",
+                              onPressed: (){
+                                ProductsRepo.updateMyCart(
+                                  successState.products[index].id
+                                );
+                              },
+                              child: const Text("Add to Cart",
                               style: TextStyle(
                                 color: Colors.white
                               ),),
